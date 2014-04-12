@@ -1266,6 +1266,12 @@ modlibexec_LTLIBRARIES += \
 		module-zeroconf-discover.la
 endif
 
+if HAVE_GUPNP
+modlibexec_LTLIBRARIES += \
+		module-gupnp-discover.la \
+		module-gupnp-sink.la
+endif
+
 if HAVE_BONJOUR
 modlibexec_LTLIBRARIES += \
 		module-bonjour-publish.la
@@ -1400,6 +1406,8 @@ SYMDEF_FILES = \
 		module-sine-source-symdef.h \
 		module-zeroconf-publish-symdef.h \
 		module-zeroconf-discover-symdef.h \
+		module-gupnp-discover-symdef.h \
+		module-gupnp-sink-symdef.h \
 		module-bonjour-publish-symdef.h \
 		module-lirc-symdef.h \
 		module-xenpv-sink-symdef.h \
@@ -1792,6 +1800,18 @@ module_alsa_card_la_CFLAGS = $(AM_CFLAGS) $(ASOUNDLIB_CFLAGS)
 module_solaris_la_SOURCES = modules/module-solaris.c
 module_solaris_la_LDFLAGS = $(MODULE_LDFLAGS)
 module_solaris_la_LIBADD = $(MODULE_LIBADD)
+
+# GUPNP-AV
+
+module_gupnp_discover_la_SOURCES = modules/module-gupnp-discover.c
+module_gupnp_discover_la_LDFLAGS = $(MODULE_LDFLAGS)
+module_gupnp_discover_la_LIBADD = $(MODULE_LIBADD) $(GUPNP_LIBS) $(GUPNP_AV_LIBS) $(GSSDP_LIBS) $(GLIB20_LIBS) $(GOBJECT20_LIBS)
+module_gupnp_discover_la_CFLAGS = $(AM_CFLAGS) $(GUPNP_CFLAGS) $(GUPNP_AV_CFLAGS) $(GSSDP_CGLAGS) $(GLIB20_CFLAGS) $(GOBJECT20_CFLAGS)
+
+module_gupnp_sink_la_SOURCES = modules/module-gupnp-sink.c
+module_gupnp_sink_la_LDFLAGS = $(MODULE_LDFLAGS)
+module_gupnp_sink_la_LIBADD = $(MODULE_LIBADD) $(GUPNP_LIBS) $(GUPNP_AV_LIBS) $(GSSDP_LIBS) $(GLIB20_LIBS) $(GOBJECT20_LIBS)
+module_gupnp_sink_la_CFLAGS = $(AM_CFLAGS) $(GUPNP_CFLAGS) $(GUPNP_AV_CFLAGS) $(GSSDP_CGLAGS) $(GLIB20_CFLAGS) $(GOBJECT20_CFLAGS)
 
 # Avahi
 
