@@ -848,6 +848,22 @@ AC_SUBST(HAVE_GLIB20)
 AM_CONDITIONAL([HAVE_GLIB20], [test "x$HAVE_GLIB20" = x1])
 AS_IF([test "x$HAVE_GLIB20" = "x1"], AC_DEFINE([HAVE_GLIB], 1, [Have GLIB?]))
 
+#### GObject 2 support (optional) ####
+
+AC_ARG_ENABLE([gobject2],
+    AS_HELP_STRING([--disable-gobject2],[Disable optional GObject 2 support]))
+
+AS_IF([test "x$enable_gobject2" != "xno"],
+    [PKG_CHECK_MODULES(GOBJECT20, [ gobject-2.0 >= 0.28 ], HAVE_GOBJECT20=1, HAVE_GOBJECT20=0)],
+    HAVE_GOBJECT20=0)
+
+AS_IF([test "x$enable_gobject2" = "xyes" && test "x$HAVE_GOBJECT20" = "x0"],
+    [AC_MSG_ERROR([*** GObject 2 support not found])])
+
+AC_SUBST(HAVE_GOBJECT20)
+AM_CONDITIONAL([HAVE_GOBJECT20], [test "x$HAVE_GOBJECT20" = x1])
+AS_IF([test "x$HAVE_GOBJECT20" = "x1"], AC_DEFINE([HAVE_GOBJECT], 1, [Have GOBJECT?]))
+
 #### GTK3 support (optional) ####
 
 AC_ARG_ENABLE([gtk3],
@@ -1417,6 +1433,7 @@ AS_IF([test "x$HAVE_COREAUDIO" = "x1"], ENABLE_COREAUDIO=yes, ENABLE_COREAUDIO=n
 AS_IF([test "x$HAVE_SOLARIS" = "x1"], ENABLE_SOLARIS=yes, ENABLE_SOLARIS=no)
 AS_IF([test "x$HAVE_WAVEOUT" = "x1"], ENABLE_WAVEOUT=yes, ENABLE_WAVEOUT=no)
 AS_IF([test "x$HAVE_GLIB20" = "x1"], ENABLE_GLIB20=yes, ENABLE_GLIB20=no)
+AS_IF([test "x$HAVE_GOBJECT20" = "x1"], ENABLE_GOBJECT20=yes, ENABLE_GOBJECT20=no)
 AS_IF([test "x$HAVE_GTK30" = "x1"], ENABLE_GTK30=yes, ENABLE_GTK30=no)
 AS_IF([test "x$HAVE_GCONF" = "x1"], ENABLE_GCONF=yes, ENABLE_GCONF=no)
 AS_IF([test "x$HAVE_AVAHI" = "x1"], ENABLE_AVAHI=yes, ENABLE_AVAHI=no)
@@ -1473,6 +1490,7 @@ echo "
     Enable Solaris:                ${ENABLE_SOLARIS}
     Enable WaveOut:                ${ENABLE_WAVEOUT}
     Enable GLib 2.0:               ${ENABLE_GLIB20}
+    Enable GObject 2.0:            ${ENABLE_GOBJECT20}
     Enable Gtk+ 3.0:               ${ENABLE_GTK30}
     Enable GConf:                  ${ENABLE_GCONF}
     Enable Avahi:                  ${ENABLE_AVAHI}
