@@ -908,6 +908,33 @@ AS_IF([test "x$enable_avahi" = "xyes" && test "x$HAVE_AVAHI" = "x0"],
 AC_SUBST(HAVE_AVAHI)
 AM_CONDITIONAL([HAVE_AVAHI], [test "x$HAVE_AVAHI" = x1])
 
+#### gupnp (optional) ####
+
+AC_ARG_ENABLE([gupnp],
+    AS_HELP_STRING([--disable-gupnp],[Disable optional UPnp/AV support]))
+
+AS_IF([test "x$enable_gupnp" != "xno"],
+    [PKG_CHECK_MODULES(GUPNP, [ gupnp-1.0 >= 0.20.10 ],
+		       HAVE_GUPNP=1, HAVE_GUPNP=0)],
+    HAVE_GUPNP=0)
+
+AS_IF([test "x$enable_gupnp" != "xno"],
+    [PKG_CHECK_MODULES(GUPNP_AV, [ gupnp-av-1.0 >= 0.12.5 ],
+		       HAVE_GUPNP_AV=1, HAVE_GUPNP_AV=0)],
+    HAVE_GUPNP_AV=0)
+
+AS_IF([test "x$enable_gupnp" != "xno"],
+    [PKG_CHECK_MODULES(GSSDP, [ gssdp-1.0 >= 0.14.7 ],
+		       HAVE_GSSDP=1, HAVE_GSSDP=0)],
+    HAVE_GSSDP=0)
+
+AS_IF([test "x$enable_gupnp" = "xyes" && (test "x$HAVE_GUPNP" = "x0" ||
+					  test "x$HAVE_GUPNP_AV" = "x0" ||
+					  test "x$HAVE_GSSDP" = "x0")],
+    [AC_MSG_ERROR([*** gupnp/gupnp-av/gssdp support not found])])
+
+AM_CONDITIONAL([HAVE_GUPNP], [test "x$HAVE_GUPNP" = x1])
+
 #### JACK (optional) ####
 
 AC_ARG_ENABLE([jack],
@@ -1437,6 +1464,7 @@ AS_IF([test "x$HAVE_GOBJECT20" = "x1"], ENABLE_GOBJECT20=yes, ENABLE_GOBJECT20=n
 AS_IF([test "x$HAVE_GTK30" = "x1"], ENABLE_GTK30=yes, ENABLE_GTK30=no)
 AS_IF([test "x$HAVE_GCONF" = "x1"], ENABLE_GCONF=yes, ENABLE_GCONF=no)
 AS_IF([test "x$HAVE_AVAHI" = "x1"], ENABLE_AVAHI=yes, ENABLE_AVAHI=no)
+AS_IF([test "x$HAVE_GUPNP" = "x1"], ENABLE_GUPNP=yes, ENABLE_GUPNP=no)
 AS_IF([test "x$HAVE_JACK" = "x1"], ENABLE_JACK=yes, ENABLE_JACK=no)
 AS_IF([test "x$HAVE_LIBASYNCNS" = "x1"], ENABLE_LIBASYNCNS=yes, ENABLE_LIBASYNCNS=no)
 AS_IF([test "x$HAVE_LIRC" = "x1"], ENABLE_LIRC=yes, ENABLE_LIRC=no)
@@ -1494,6 +1522,7 @@ echo "
     Enable Gtk+ 3.0:               ${ENABLE_GTK30}
     Enable GConf:                  ${ENABLE_GCONF}
     Enable Avahi:                  ${ENABLE_AVAHI}
+    Enable gupnp-av:		   ${ENABLE_GUPNP}
     Enable Jack:                   ${ENABLE_JACK}
     Enable Async DNS:              ${ENABLE_LIBASYNCNS}
     Enable LIRC:                   ${ENABLE_LIRC}
