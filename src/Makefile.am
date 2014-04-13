@@ -945,6 +945,12 @@ libpulsecore_@PA_MAJORMINOR@_la_CFLAGS += $(X11_CFLAGS)
 libpulsecore_@PA_MAJORMINOR@_la_LDFLAGS += $(X11_LIBS)
 endif
 
+if HAVE_GLIB20
+libpulsecore_@PA_MAJORMINOR@_la_SOURCES += pulsecore/glib-utils.c pulsecore/glib-utils.h
+libpulsecore_@PA_MAJORMINOR@_la_CFLAGS += $(GLIB20_CFLAGS)
+libpulsecore_@PA_MAJORMINOR@_la_LDFLAGS += $(GLIB20_LIBS)
+endif
+
 if HAVE_DBUS
 libpulsecore_@PA_MAJORMINOR@_la_SOURCES += \
 		pulsecore/dbus-shared.c pulsecore/dbus-shared.h \
